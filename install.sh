@@ -4,17 +4,17 @@ set -euo pipefail
 umask 077
 
 REPO="nodonuts/htve-releases"
-VERSION="v0.2.0-rc1"
+RELEASE_TAG="v0.2.0-rc1"
 ARCHIVE="htve-platform-upstream-v0.2.0-rc1.tar.gz"
 SHA256="d7d61929187c2571866027de31a3259e7221a8e3bcebc600a248e7f012654929"
-BASE="https://github.com/${REPO}/releases/download/${VERSION}"
-INSTALL_DIR="/opt/htve-platform-installers/${VERSION}"
+BASE="https://github.com/${REPO}/releases/download/${RELEASE_TAG}"
+INSTALL_DIR="/opt/htve-platform-installers/${RELEASE_TAG}"
 
 die() { printf 'ERROR: %s\n' "$*" >&2; exit 1; }
 
 usage() {
     cat <<EOF
-HTVE Platform upstream-only bootstrap (${VERSION})
+HTVE Platform upstream-only bootstrap (${RELEASE_TAG})
 
 Usage:
   bash htve-install.sh --verify           Download and verify only (safe on existing hosts)
@@ -75,7 +75,7 @@ fi
 TMPDIR_HTVE="$(mktemp -d /tmp/htve-bootstrap-XXXXXXXX)"
 trap 'rm -rf "$TMPDIR_HTVE"' EXIT
 
-printf 'HTVE Platform %s: downloading release archive and checksum...\n' "$VERSION"
+printf 'HTVE Platform %s: downloading release archive and checksum...\n' "$RELEASE_TAG"
 curl --proto '=https' --tlsv1.2 -fsSL --retry 3 --connect-timeout 15 \
     -o "$TMPDIR_HTVE/$ARCHIVE" "$BASE/$ARCHIVE"
 curl --proto '=https' --tlsv1.2 -fsSL --retry 3 --connect-timeout 15 \
@@ -93,7 +93,7 @@ printf '%s  %s\n' "$SHA256" "$ARCHIVE" |
 tar -tzf "$TMPDIR_HTVE/$ARCHIVE" >/dev/null ||
     die "Archive integrity verification failed"
 
-printf 'Release %s verified (pinned SHA-256).\n' "$VERSION"
+printf 'Release %s verified (pinned SHA-256).\n' "$RELEASE_TAG"
 if [[ "$ACTION" == "--verify" ]]; then
     echo "Verification only: no HTVE configuration or containers changed."
     exit 0
