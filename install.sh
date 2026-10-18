@@ -4,9 +4,9 @@ set -euo pipefail
 umask 077
 
 REPO="nodonuts/htve-releases"
-RELEASE_TAG="v0.2.0-rc1"
-ARCHIVE="htve-platform-upstream-v0.2.0-rc1.tar.gz"
-SHA256="d7d61929187c2571866027de31a3259e7221a8e3bcebc600a248e7f012654929"
+RELEASE_TAG="v0.2.0-rc3"
+ARCHIVE="htve-platform-upstream-v0.2.0-rc3.tar.gz"
+SHA256="eff218a332464212e6853c29641cb74b4db9a8a088e06adfe9e8a9191e60c35a"
 BASE="https://github.com/${REPO}/releases/download/${RELEASE_TAG}"
 INSTALL_DIR="/opt/htve-platform-installers/${RELEASE_TAG}"
 
@@ -18,8 +18,8 @@ HTVE Platform upstream-only bootstrap (${RELEASE_TAG})
 
 Usage:
   bash htve-install.sh --verify           Download and verify only (safe on existing hosts)
-  sudo bash htve-install.sh --install     Install on clean Debian 13 amd64
-  sudo bash htve-install.sh --resume ID   Resume an interrupted installation
+  bash htve-install.sh --install     Install on clean Debian 13 amd64
+  bash htve-install.sh --resume ID   Resume an interrupted installation
 
 With no arguments, --install is assumed.
 Release files remain at ${INSTALL_DIR} for recovery.
@@ -60,7 +60,7 @@ for command in curl tar sha256sum cmp mktemp; do
 done
 
 if [[ "$ACTION" == "--install" ]]; then
-    [[ "$(id -u)" -eq 0 ]] || die "Installation requires root (run with sudo)"
+    [[ "$(id -u)" -eq 0 ]] || die "Installation requires a root shell"
     [[ -r /etc/os-release ]] || die "Cannot check operating system"
     # shellcheck source=/dev/null
     source /etc/os-release

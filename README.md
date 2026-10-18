@@ -1,29 +1,66 @@
-# HTVE Releases
+# HTVE Platform Releases
 
-Public, versioned **upstream-only** installer packages for HTVE Platform.
+Public, upstream-only installers for HTVE Platform.
 
-> **Status:** Pre-release testing. No public installation package has been published yet. Do not use this repository as an installation source until a verified release and its checksum are available.
+Latest prerelease: v0.2.0-rc3
 
-## What the installer targets
+## Requirements
 
-- Debian 13 (amd64)
-- Official FastChannels and AH4C container images
-- DirecTV Stream with an account provided by the installer operator
-- An operator-supplied Fire TV / Android TV tuner, ADB connection, and HDMI encoder stream
-- Optional integration with an existing Channels DVR server, configured during setup
+- Fresh Debian 13 amd64 installation
+- Root shell
+- Fire TV or Android TV device with ADB enabled
+- Compatible HDMI encoder
+- DirecTV Stream subscription
+- Channels DVR server
+- Trusted local network
 
-The installer asks for host addresses, ports, and hardware assignments. No private network addresses or credentials are bundled. It requires explicit tuner-hardware authorization.
+## Installation
 
-## Planned distribution
+Run these commands as root.
 
-Each pre-release or release will include a versioned `.tar.gz` installer archive and published SHA-256 checksum. A small bootstrap script will fetch and verify the pinned archive before starting the interactive installer.
+Install curl if needed:
 
-Downloading a public release will **not require a GitHub account**.
+    apt-get update
+    apt-get install -y curl
+
+Download the public installer:
+
+    curl -fsSL https://raw.githubusercontent.com/nodonuts/htve-releases/main/install.sh -o htve-install.sh
+
+Verify the download:
+
+    bash htve-install.sh --verify
+
+Start installation:
+
+    bash htve-install.sh --install
+
+The installer verifies the release checksum before installation.
+
+## What gets installed
+
+- Docker Engine and Compose
+- FastChannels v5.5.1
+- AH4C 2026.09.30
+- Automatic AH4C tuning scripts
+
+The guided installer collects server addresses, tuner assignments,
+encoder URLs, and protected hardware information.
+
+## After installation
+
+Configure DirecTV authentication in FastChannels.
+Run channel discovery and Stream Audit.
+Enable Bridge mode, hardware capture, and ah4c Capture.
+Authorize your Fire TV devices and update FastChannels Player.
+Verify playback before adding feeds to Channels DVR.
 
 ## Important limitations
 
-Provider authentication, channel approval, and initial FastChannels bridge setup still require web UI interaction. Automated upgrades, full rollback, and recovery of partially created containers are not yet implemented.
+This is prerelease software.
+Provider authentication and bridge configuration are interactive.
+Automated platform upgrades and full recovery are not yet implemented.
+Do not expose application or ADB ports directly to the Internet.
+Do not assign devices already controlled by another installation.
 
-Keep FastChannels and AH4C ports on trusted networks; **do not expose them directly to the public internet**. Never assign a tuner already controlled by another server.
-
-This repository holds **distribution artifacts only**; it is not a mirror of the private development repository or its JDG-specific overlays.
+Earlier prereleases remain available under GitHub Releases.
